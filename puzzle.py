@@ -14,7 +14,7 @@ class Puzzle: # Generic puzzle of size n^2 - 1
         return self.join(map(str, self))
 
 
-def general_search(problem, queuing_function): # queuing function implementations are uniform cost search, A* with the
+def general_search(problem: list[list[int]], queuing_function): # queuing function implementations are uniform cost search, A* with the
                                                # Misplaced Tile heuristic, and A* with the Manhattan distance heuristic
     initialState = Puzzle(problem)
     nodes = pq(puzzles.create_node("root", data={"state": initialState.state})) # I used a tree implementation to initialize the
@@ -42,7 +42,7 @@ def manhattan_dist(search_space, ): # A* search with Manhattan distance heuristi
 
 # def check_blank(problem) -> int:
 
-def move_up(problem) -> list[list[int]]:
+def move_up(problem: list[list[int]]) -> list[list[int]]:
     for row in problem:
         for col in row:
             if problem[row][col] == 0:
@@ -51,7 +51,7 @@ def move_up(problem) -> list[list[int]]:
 
     return problem
 
-def move_down(problem) -> list[list[int]]:
+def move_down(problem: list[list[int]]) -> list[list[int]]:
     for row in problem:
         for col in row:
             if problem[row][col] == 0:
@@ -60,7 +60,7 @@ def move_down(problem) -> list[list[int]]:
 
     return problem
 
-def move_left(problem) -> list[list[int]]:
+def move_left(problem: list[list[int]]) -> list[list[int]]:
     for row in problem:
         for col in row:
             if problem[row][col] == 0:
@@ -69,7 +69,7 @@ def move_left(problem) -> list[list[int]]:
 
     return problem
 
-def move_right(problem) -> list[list[int]]:
+def move_right(problem: list[list[int]]) -> list[list[int]]:
     for row in problem:
         for col in row:
             if problem[row][col] == 0:
@@ -78,9 +78,9 @@ def move_right(problem) -> list[list[int]]:
 
     return problem
 
-def expand(head): # Creates all children of current node "head" where each child is a different single operator applied
+def expand(head: Puzzle): # Creates all children of current node "head" where each child is a different single operator applied
                     # to input state
     puzzles.create_node(data={"state": move_left(head.state)})
     puzzles.create_node(data={"state": move_right(head.state)})
-    puzzles.create_node(data={"state": move_right(head.state)})
-    puzzles.create_node(data={"state": move_right(head.state)})
+    puzzles.create_node(data={"state": move_up(head.state)})
+    puzzles.create_node(data={"state": move_down(head.state)})
