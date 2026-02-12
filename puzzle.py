@@ -77,3 +77,10 @@ def move_right(problem) -> list[list[int]]:
                     problem[row][col+1], problem[row][col] = problem[row][col], problem[row][col+1]
 
     return problem
+
+def expand(head): # Creates all children of current node "head" where each child is a different single operator applied
+                    # to input state
+    puzzles.create_node(data={"state": move_left(head.state)})
+    puzzles.create_node(data={"state": move_right(head.state)})
+    puzzles.create_node(data={"state": move_right(head.state)})
+    puzzles.create_node(data={"state": move_right(head.state)})
