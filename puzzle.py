@@ -41,4 +41,39 @@ def manhattan_dist(search_space, ): # A* search with Manhattan distance heuristi
     pass
 
 # def check_blank(problem) -> int:
-    
+
+def move_up(problem) -> list[list[int]]:
+    for row in problem:
+        for col in row:
+            if problem[row][col] == 0:
+                if row > 0:
+                    problem[row-1][col], problem[row][col] = problem[row][col], problem[row-1][col]
+
+    return problem
+
+def move_down(problem) -> list[list[int]]:
+    for row in problem:
+        for col in row:
+            if problem[row][col] == 0:
+                if row < len(problem) - 1:
+                    problem[row+1][col], problem[row][col] = problem[row][col], problem[row+1][col]
+
+    return problem
+
+def move_left(problem) -> list[list[int]]:
+    for row in problem:
+        for col in row:
+            if problem[row][col] == 0:
+                if col > 0:
+                    problem[row][col-1], problem[row][col] = problem[row][col], problem[row][col-1]
+
+    return problem
+
+def move_right(problem) -> list[list[int]]:
+    for row in problem:
+        for col in row:
+            if problem[row][col] == 0:
+                if col < len(problem[0]) - 1:
+                    problem[row][col+1], problem[row][col] = problem[row][col], problem[row][col+1]
+
+    return problem
