@@ -29,3 +29,16 @@ def general_search(problem, queuing_function): # queuing function implementation
             return node.state
         
         nodes = uniform_cost(nodes, )
+
+
+def uniform_cost(search_space, ): # Uniform cost search
+    pass
+
+def misplaced_tile(search_space, ): # A* search with Misplaced Tile heuristic
+    pass
+
+def manhattan_dist(search_space, ): # A* search with Manhattan distance heuristic
+    pass
+
+# def check_blank(problem) -> int:
+    
