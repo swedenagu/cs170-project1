@@ -42,6 +42,7 @@ class Puzzle:  # Generic puzzle of size n^2 - 1 elements. We need to keep track 
         self.state = state
         self.heuristic = heuristic
         self.move = move
+        self.size = len(state)
 
 
 # pseudocode
