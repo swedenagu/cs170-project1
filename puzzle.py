@@ -7,12 +7,21 @@ goalState = [[1, 2, 3], [4, 5, 6], [7, 8, 0]] # Hardcoded goal state of eight pu
 puzzles = Tree()
 
 class Puzzle: # Generic puzzle of size n^2 - 1
-    def __init__(self, state):
+    def __init__(self, state: list[list[int]]):
         self.state = state
 
     def __str__(self):
         return self.join(map(str, self))
 
+# pseudocode
+# function general-search(problem, QUEUEING-FUNCTION)
+# 	nodes = MAKE-QUEUE(MAKE-NODE(problem.INITIAL-STATE))
+# loop do
+# if EMPTY(nodes)then return "failure"
+# 	node = REMOVE-FRONT(nodes)
+# if problem.GOAL-TEST(node.STATE) succeeds then return node
+# 	nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))
+# end
 
 def general_search(problem: list[list[int]], queuing_function): # queuing function implementations are uniform cost search, A* with the
                                                # Misplaced Tile heuristic, and A* with the Manhattan distance heuristic
@@ -31,52 +40,41 @@ def general_search(problem: list[list[int]], queuing_function): # queuing functi
         nodes = uniform_cost(nodes, )
 
 
-def uniform_cost(search_space, ): # Uniform cost search
-    pass
+# def move_up(problem: list[list[int]]) -> list[list[int]]:
+#     for row in problem:
+#         for col in row:
+#             if problem[row][col] == 0:
+#                 if row > 0:
+#                     problem[row-1][col], problem[row][col] = problem[row][col], problem[row-1][col]
 
-def misplaced_tile(search_space, ): # A* search with Misplaced Tile heuristic
-    pass
+#     return problem
 
-def manhattan_dist(search_space, ): # A* search with Manhattan distance heuristic
-    pass
+# def move_down(problem: list[list[int]]) -> list[list[int]]:
+#     for row in problem:
+#         for col in row:
+#             if problem[row][col] == 0:
+#                 if row < len(problem) - 1:
+#                     problem[row+1][col], problem[row][col] = problem[row][col], problem[row+1][col]
 
-# def check_blank(problem) -> int:
+#     return problem
 
-def move_up(problem: list[list[int]]) -> list[list[int]]:
-    for row in problem:
-        for col in row:
-            if problem[row][col] == 0:
-                if row > 0:
-                    problem[row-1][col], problem[row][col] = problem[row][col], problem[row-1][col]
+# def move_left(problem: list[list[int]]) -> list[list[int]]:
+#     for row in problem:
+#         for col in row:
+#             if problem[row][col] == 0:
+#                 if col > 0:
+#                     problem[row][col-1], problem[row][col] = problem[row][col], problem[row][col-1]
 
-    return problem
+#     return problem
 
-def move_down(problem: list[list[int]]) -> list[list[int]]:
-    for row in problem:
-        for col in row:
-            if problem[row][col] == 0:
-                if row < len(problem) - 1:
-                    problem[row+1][col], problem[row][col] = problem[row][col], problem[row+1][col]
+# def move_right(problem: list[list[int]]) -> list[list[int]]:
+#     for row in problem:
+#         for col in row:
+#             if problem[row][col] == 0:
+#                 if col < len(problem[0]) - 1:
+#                     problem[row][col+1], problem[row][col] = problem[row][col], problem[row][col+1]
 
-    return problem
-
-def move_left(problem: list[list[int]]) -> list[list[int]]:
-    for row in problem:
-        for col in row:
-            if problem[row][col] == 0:
-                if col > 0:
-                    problem[row][col-1], problem[row][col] = problem[row][col], problem[row][col-1]
-
-    return problem
-
-def move_right(problem: list[list[int]]) -> list[list[int]]:
-    for row in problem:
-        for col in row:
-            if problem[row][col] == 0:
-                if col < len(problem[0]) - 1:
-                    problem[row][col+1], problem[row][col] = problem[row][col], problem[row][col+1]
-
-    return problem
+#     return problem
 
 def expand(head: Puzzle): # Creates all children of current node "head" where each child is a different single operator applied
                     # to input state
