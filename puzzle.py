@@ -12,11 +12,11 @@ puzzles = Tree()
 
 
 class Puzzle:  # Generic puzzle of size n^2 - 1 elements. We need to keep track of the cost of different moves, the "parent" of each puzzle when we expand from a given game state, the current state of the board, and a way to calculate the heuristic.
-    def __init__(self, state: list[list[int]]):
+    def __init__(self, state: list[list[int]], heuristic: int, parent: list[list[int]], move: str):
         self.state = state
-
-    def __str__(self):
-        return self.join(map(str, self))
+        self.heuristic = heuristic
+        self.parent = parent
+        self.move = move
 
 
 # pseudocode
