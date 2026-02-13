@@ -2,61 +2,30 @@ from queue import PriorityQueue as pq
 from puzzle import Puzzle, goalState
 import numpy as np
 
-def uniform_cost(search_space: list[list[int]], heuristic: int) -> int: # Uniform cost search
+def uniform_cost(search_space: list[list[int]]) -> int: # Uniform cost search
     # The uniform cost search is just A* with the heuristic hardcoded to 0, so it should devolve to breadth-first search by default. We don't need to do anything
-    # # Track the initial state with a priority queue, states we're still exploring with a process queue
-    # initial_state = Puzzle(search_space)
-    # expanding_queue = pq()
-
-    # # We want to track all the nodes we already visited/explored to avoid repeated work
-    # visited = set()
-    # expanding_queue.put(initial_state)
-
-    # # How many new states are there to explore? Should be capped at a certain amount
-    # nodes_expanded = 0
-    # max_queue_size = 0
-    
-    # # repeated_states[starting_node.board_to_tuple()] = "This is the parent board"
-
-    # board_states = [] # We keep track of the stack trace of board states by storing them
-
-    # # stack_to_print = [] # the board states are stored in a stack
-
-    # # while len(working_queue) > 0:
-    # #     max_queue_size = max(len(working_queue), max_queue_size)
-    # #     # the node from the queue being considered/checked
-    # #     node_from_queue = min_heap_esque_queue.heappop(working_queue)
-    # #     repeated_states[node_from_queue.board_to_tuple()] = "This can be anything"
-    # #     if node_from_queue.solved(): # check if the current state of the board is the solution
-    # #         while len(stack_to_print) > 0: # the stack of nodes for the traceback
-    # #             print_puzzle(stack_to_print.pop())
-    # #         print("Number of nodes expanded:", num_nodes_expanded)
-    # #         print("Max queue size:", max_queue_size)
-    # #         return node_from_queue
-        
-    # # stack_to_print.append(node_from_queue.board)
     return 0
 
-def misplaced_tile(search_space: list[list[int]], heuristic: int) -> int: # A* search with Misplaced Tile heuristic
+def misplaced_tile(search_space: list[list[int]]) -> int: # A* search with Misplaced Tile heuristic
     # Since the heuristic is the number of tiles out of place from the goal state, we can use a counter to track each tile in the puzzle's current state that isn't in the correct position
     count = 0
     
-    for row in search_space:
-        for col in row:
-            if search_space[row][col]!= 0 and search_space[row][col] != goalState[row][col]:
+    for i, row in enumerate(search_space):
+        for j, col in enumerate(row):
+            if search_space[i][j]!= 0 and search_space[i][j] != goalState[i][j]:
                 count += 1
 
     return count
 
-def manhattan_dist(search_space: list[list[int]], heuristic: int) -> int: # A* search with Manhattan distance heuristic
+def manhattan_dist(search_space: list[list[int]]) -> int: # A* search with Manhattan distance heuristic
     # If the cost (1) is the same in all 4 directions we can move, the heuristic is simply the sum of the distances in the x and y direction between the current state and the goal state
 
     distance = 0
-    for row in search_space:
-        for col in row:
-            if search_space[row][col] != 0:
+    for i, row in enumerate(search_space):
+        for j, col in enumerate(row):
+            if search_space[i][j] != 0:
                 # We can make a tuple of arrays, one for each row and column and target the specific value we want using those two dimensions
-                goalState_indices = np.where(search_space == search_space[row][col])
+                goalState_indices = np.where(goalState == search_space[i][j])
                 goalState_row = goalState_indices[0][0]
                 goalState_col = goalState_indices[1][0]
 
@@ -64,3 +33,103 @@ def manhattan_dist(search_space: list[list[int]], heuristic: int) -> int: # A* s
                 distance += abs(row - goalState_row) + abs(col - goalState_col)
 
     return distance
+
+def a_star(search_space, goalState, heuristic: int):
+    # Track the initial state with a priority queue, states we're still exploring with a process queue
+    initial_state = Puzzle(search_space)
+    expanding_queue = pq()
+
+    # We want to track all the nodes we already visited/explored to avoid repeated work
+    visited = set()
+    nodes_expanded = 0
+    max_queue_size = 0
+    counter = 0
+    
+    # repeated_states[starting_node.board_to_tuple()] = "This is the parent board"
+
+    expanding_queue.put((0, counter, initial_state))
+    counter += 1
+    # board_states = [] # We keep track of the stack trace of board states by storing them
+
+    # stack_to_print = [] # the board states are stored in a stack
+
+    while expanding_queue:
+        max_queue_size = max(len(expanding_queue), max_queue_size)
+
+        # We want to look at the puzzle with the lowest combined heuristic and cost next
+        next = expanding_queue.get()
+        current = next[2]
+
+        # This makes sure we don't go to a state we already visited
+        if current.to_tuple() in visited:
+            continue
+
+        visited.add(current.to_tuple())
+        nodes_expanded += 1
+
+        if heuristic == 0:
+            h = uniform_cost(current.board)
+        elif heuristic == 1:
+            h = misplaced_tile(current.board)
+        elif heuristic == 2:
+            h = manhattan_dist(current.board)
+
+        # We find the misplaced tiles for the current state
+        if heuristic == 1:
+            h = 0
+            for i, row in enumerate(current):
+                for j, col in enumerate(row):
+                    if current.board[i][j] != 0:
+                        if current.board[i][j] != goalState[i][j]:
+                            h += 1
+        
+        # We find the Manhattan distance for the current state
+        elif heuristic == 2:
+            h = 0
+            for row in range(len(current)):
+                for col in range(len(current)):
+                    if current[row][col] != 0:
+                        goalState_indices = np.where(current == current[row][col])
+                        goalState_row = goalState_indices[0][0]
+                        goalState_col = goalState_indices[1][0]
+                        h += abs(row - goalState_row) + abs(col - goalState_col)
+
+        # Did we reach the goal state yet?
+        if current.goalCheck(goalState):
+            print("Goal reached!")
+            print(f"Solution depth was {current.cost}")
+            print(f"Number of nodes expanded: {nodes_expanded}")
+            print(f"Max queue size: {max_queue_size}")
+
+            return current, nodes_expanded, max_queue_size
+
+        # Find neighbors to explore next
+        if heuristic == 1:
+            nearest = current.nearest
+            for tile in nearest:
+                h = 0
+                for row in range(len(tile)):
+                    for col in range(len(tile)):
+                        if tile.board != 0:
+                            if tile.board[row][col] != goalState[row][col]:
+                                h += 1
+
+                priority = tile.cost + h
+                expanding_queue.put((priority, counter, tile))
+                counter += 1
+        elif heuristic == 2:
+            pass
+
+    # while len(working_queue) > 0:
+    #     max_queue_size = max(len(working_queue), max_queue_size)
+    #     # the node from the queue being considered/checked
+    #     node_from_queue = min_heap_esque_queue.heappop(working_queue)
+    #     repeated_states[node_from_queue.board_to_tuple()] = "This can be anything"
+    #     if node_from_queue.solved(): # check if the current state of the board is the solution
+    #         while len(stack_to_print) > 0: # the stack of nodes for the traceback
+    #             print_puzzle(stack_to_print.pop())
+    #         print("Number of nodes expanded:", num_nodes_expanded)
+    #         print("Max queue size:", max_queue_size)
+    #         return node_from_queue
+        
+    # stack_to_print.append(node_from_queue.board)
