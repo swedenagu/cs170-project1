@@ -11,7 +11,7 @@ goalState = [
 puzzles = Tree()
 
 
-class Puzzle:  # Generic puzzle of size n^2 - 1
+class Puzzle:  # Generic puzzle of size n^2 - 1 elements. We need to keep track of the cost of different moves, the "parent" of each puzzle when we expand from a given game state, the current state of the board, and a way to calculate the heuristic.
     def __init__(self, state: list[list[int]]):
         self.state = state
 
@@ -52,9 +52,9 @@ def general_search(
         ):  # Are we at the solution yet? Compares goal/solution state to current state of puzzle
             return node.state
 
-        nodes = uniform_cost(
+        nodes = queuing_function(nodes, expand(node, problem.OPERATORS)
             nodes,
-        )
+        ) # temporary code until operators and search algorithms are defined
 
 
 # We need to know the position of the "blank" tile in order to perform an operation (move it in one of four directions)
@@ -103,12 +103,3 @@ def check_blank(problem: list[list[int]]):
 
 #     return problem
 
-
-def expand(
-    head: Puzzle,
-):  # Creates all children of current node "head" where each child is a different single operator applied
-    # to input state
-    puzzles.create_node(data={"state": move_left(head.state)})
-    puzzles.create_node(data={"state": move_right(head.state)})
-    puzzles.create_node(data={"state": move_up(head.state)})
-    puzzles.create_node(data={"state": move_down(head.state)})
