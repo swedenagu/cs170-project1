@@ -1,7 +1,12 @@
-def uniform_cost(search_space: list[list[int]], ): # Uniform cost search
-    # starting_node = TreeNode.TreeNode(None, puzzle, 0, 0)
-    # working_queue = []
-    # repeated_states = dict()
+from queue import PriorityQueue as pq
+
+def uniform_cost(search_space: list[list[int]], heuristic: int): # Uniform cost search
+    # Track the initial state with a priority queue, states we're still exploring with a process queue
+    priority_queue = pq()
+    expanding_queue = []
+
+    # Which nodes have we explored already? We want to minimize repeated work
+    visited = set()
     # min_heap_esque_queue.heappush(working_queue, starting_node)
     # num_nodes_expanded = 0
     # max_queue_size = 0
@@ -22,6 +27,7 @@ def uniform_cost(search_space: list[list[int]], ): # Uniform cost search
     #         return node_from_queue
         
     # stack_to_print.append(node_from_queue.board)
+    pass
 
 def misplaced_tile(search_space: list[list[int]], ): # A* search with Misplaced Tile heuristic
     pass

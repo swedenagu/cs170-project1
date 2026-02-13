@@ -2,7 +2,33 @@ from queue import PriorityQueue as pq
 from treelib import Tree
 from array import *
 
-problem = []
+# problem = []
+# We can use multiple test cases provided as samples to assess each algorithm
+trivial = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 0],
+]
+veryEasy = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 0, 8],
+]
+easy = [
+    [1, 2, 0],
+    [4, 5, 3],
+    [7, 8, 6],
+]
+doable = [
+    [0, 1, 2],
+    [4, 5, 3],
+    [7, 8, 6],
+]
+hard = [
+    [8, 7, 1],
+    [6, 0, 2],
+    [5, 4, 3],
+]
 goalState = [
     [1, 2, 3],
     [4, 5, 6],
@@ -15,7 +41,6 @@ class Puzzle:  # Generic puzzle of size n^2 - 1 elements. We need to keep track 
     def __init__(self, state: list[list[int]], heuristic: int, parent: list[list[int]], move: str):
         self.state = state
         self.heuristic = heuristic
-        self.parent = parent
         self.move = move
 
 
@@ -103,3 +128,5 @@ def check_blank(problem: list[list[int]]):
 
 #     return problem
 
+def expand(self, node: Puzzle):
+    pass
