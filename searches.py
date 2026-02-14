@@ -2,11 +2,9 @@ from queue import PriorityQueue as pq
 from puzzle import Puzzle, goalState
 import numpy as np
 
-
 def uniform_cost(search_space: list[list[int]]) -> int:  # Uniform cost search
     # The uniform cost search is just A* with the heuristic hardcoded to 0, so it should devolve to breadth-first search by default. We don't need to do anything
     return 0
-
 
 def misplaced_tile(
     search_space: list[list[int]],
@@ -20,7 +18,6 @@ def misplaced_tile(
                 count += 1
 
     return count
-
 
 def manhattan_dist(
     search_space: list[list[int]],
@@ -40,7 +37,6 @@ def manhattan_dist(
                 distance += abs(i - goalState_row) + abs(j - goalState_col)
 
     return distance
-
 
 # the goal state wasn't really needed as a parameter so I took it out
 def a_star(search_space, heuristic: int):
@@ -65,6 +61,7 @@ def a_star(search_space, heuristic: int):
     counter = 0
 
     # Find the initial heuristic
+    h = 0
     if heuristic == 1:
         h = uniform_cost(initial_state.state)
     elif heuristic == 2:

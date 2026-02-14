@@ -2,7 +2,6 @@ from puzzle import Puzzle
 from puzzle import trivial, veryEasy, easy, doable, hard
 from searches import a_star
 
-
 def main():
     # Make a puzzle choice
     while True:
@@ -113,7 +112,6 @@ def main():
         print(f"Max queue size: {max_queue_size}")
     else:
         print("\nNo solution was found.")
-
 
 if __name__ == "__main__":
     main()
