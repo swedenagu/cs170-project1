@@ -1,9 +1,7 @@
 from queue import PriorityQueue as pq
-from treelib import Tree
 from array import *
 from copy import deepcopy
 
-# problem = []
 # We can use multiple test cases provided as samples to assess each algorithm
 trivial = [
     [1, 2, 3],
@@ -35,8 +33,6 @@ goalState = [
     [4, 5, 6],
     [7, 8, 0],
 ]  # Hardcoded goal state of eight puzzle, used to test if we found solution
-puzzles = Tree()
-
 
 class Puzzle:  # Generic puzzle of size n^2 - 1 elements. We need to keep track of the cost of different moves, the "parent" of each puzzle when we expand from a given game state, the current state of the board, the size of the board, and its neighbors after expansion.
     # don't actually need to track heuristic, that can be calculated in A* star for passed-in state
@@ -100,40 +96,3 @@ class Puzzle:  # Generic puzzle of size n^2 - 1 elements. We need to keep track 
         for row in self.state:
             print(row)
         print()
-
-# pseudocode
-# function general-search(problem, QUEUEING-FUNCTION)
-# 	nodes = MAKE-QUEUE(MAKE-NODE(problem.INITIAL-STATE))
-# loop do
-# if EMPTY(nodes)then return "failure"
-# 	node = REMOVE-FRONT(nodes)
-# if problem.GOAL-TEST(node.STATE) succeeds then return node
-# 	nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))
-# end
-
-
-def general_search(
-    problem: list[list[int]], queuing_function
-):  # queuing function implementations are uniform cost search, A* with the
-    # Misplaced Tile heuristic, and A* with the Manhattan distance heuristic
-    initialState = Puzzle(problem)
-    nodes = pq(
-        puzzles.create_node("root", data={"state": initialState.state})
-    )  # I used a tree implementation to initialize the
-    #  first game state of the puzzle, which can be any test case
-
-    while True:
-        if (
-            not nodes
-        ):  # Search function should fail if there are no more game states to explore (no solution!)
-            return False  # might need a better return value
-        node = nodes.pop()
-
-        if (
-            goalState == node.state
-        ):  # Are we at the solution yet? Compares goal/solution state to current state of puzzle
-            return node.state
-
-        nodes = queuing_function(nodes, expand(node, problem.OPERATORS)
-            nodes,
-        ) # temporary code until operators and search algorithms are defined
