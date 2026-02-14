@@ -2,22 +2,29 @@ from queue import PriorityQueue as pq
 from puzzle import Puzzle, goalState
 import numpy as np
 
-def uniform_cost(search_space: list[list[int]]) -> int: # Uniform cost search
+
+def uniform_cost(search_space: list[list[int]]) -> int:  # Uniform cost search
     # The uniform cost search is just A* with the heuristic hardcoded to 0, so it should devolve to breadth-first search by default. We don't need to do anything
     return 0
 
-def misplaced_tile(search_space: list[list[int]]) -> int: # A* search with Misplaced Tile heuristic
+
+def misplaced_tile(
+    search_space: list[list[int]],
+) -> int:  # A* search with Misplaced Tile heuristic
     # Since the heuristic is the number of tiles out of place from the goal state, we can use a counter to track each tile in the puzzle's current state that isn't in the correct position
     count = 0
-    
+
     for i in range(len(search_space)):
         for j in range(len(search_space)):
-            if search_space[i][j]!= 0 and search_space[i][j] != goalState[i][j]:
+            if search_space[i][j] != 0 and search_space[i][j] != goalState[i][j]:
                 count += 1
 
     return count
 
-def manhattan_dist(search_space: list[list[int]]) -> int: # A* search with Manhattan distance heuristic
+
+def manhattan_dist(
+    search_space: list[list[int]],
+) -> int:  # A* search with Manhattan distance heuristic
     # If the cost (1) is the same in all 4 directions we can move, the heuristic is simply the sum of the distances in the x and y direction between the current state and the goal state
 
     distance = 0
@@ -33,6 +40,7 @@ def manhattan_dist(search_space: list[list[int]]) -> int: # A* search with Manha
                 distance += abs(i - goalState_row) + abs(j - goalState_col)
 
     return distance
+
 
 # the goal state wasn't really needed as a parameter so I took it out
 def a_star(search_space, heuristic: int):

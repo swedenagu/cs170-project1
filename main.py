@@ -2,10 +2,14 @@ from puzzle import Puzzle
 from puzzle import trivial, veryEasy, easy, doable, hard
 from searches import a_star
 
+
 def main():
     # Make a puzzle choice
-    while(True):
-        puzzle_mode = input("Welcome to an 8-Puzzle Solver. Type '1' to use a default puzzle, or '2' to create your own." + '\n')
+    while True:
+        puzzle_mode = input(
+            "Welcome to an 8-Puzzle Solver. Type '1' to use a default puzzle, or '2' to create your own."
+            + "\n"
+        )
         if puzzle_mode == "1" or puzzle_mode == "2":
             break
         print("\n")
@@ -19,17 +23,17 @@ def main():
         print("4. Doable")
         print("5. Hard")
 
-        while(True):
+        while True:
             selection = input("Enter your choice (1 - 5): ")
 
             # check puzzle choice input
-            puzzles = { '1': trivial, '2': veryEasy, '3': easy, '4': doable, '5': hard }
+            puzzles = {"1": trivial, "2": veryEasy, "3": easy, "4": doable, "5": hard}
             if selection in puzzles:
                 selected_puzzle = puzzles[selection]
                 break
-        
+
         print("\nSelected puzzle:")
-        
+
         # display the puzzle selected
         for row in selected_puzzle:
             print(row)
@@ -56,17 +60,23 @@ def main():
         print()
 
     # Select algorithm
-    while(True):
-        algorithm = input("Select the algorithm you want to use: (1) Uniform Cost Search, (2) A* with Misplaced Tile heuristic, or (3) A* with Manhattan Distance heuristic\n")
-        if algorithm in ['1', '2', '3']:
+    while True:
+        algorithm = input(
+            "Select the algorithm you want to use: (1) Uniform Cost Search, (2) A* with Misplaced Tile heuristic, or (3) A* with Manhattan Distance heuristic\n"
+        )
+        if algorithm in ["1", "2", "3"]:
             break
-    
+
     # Next, we need to map the algorithm we picked to its heuristic value. We can pass the result into our general search (A*).
-    heuristic_map = {'1': 0, '2': 1, '3': 2}
+    heuristic_map = {"1": 0, "2": 1, "3": 2}
     heuristic = heuristic_map[algorithm]
 
     # This isn't strictly necessary but it looks nicer in the initial output; map the name of each algorithm to its respective heuristic
-    algorithm_names = {0: "Uniform Cost Search", 1: "A* with Misplaced Tile heuristic", 2: "A* with Manhattan Distance heuristic"}
+    algorithm_names = {
+        0: "Uniform Cost Search",
+        1: "A* with Misplaced Tile heuristic",
+        2: "A* with Manhattan Distance heuristic",
+    }
 
     print(f"\nRunning {algorithm_names[heuristic]}...\n")
 
@@ -103,6 +113,7 @@ def main():
         print(f"Max queue size: {max_queue_size}")
     else:
         print("\nNo solution was found.")
+
 
 if __name__ == "__main__":
     main()
