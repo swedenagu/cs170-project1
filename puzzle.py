@@ -57,7 +57,7 @@ class Puzzle:  # Generic puzzle of size n^2 - 1 elements. We need to keep track 
             new_col = blank_col + x
 
             # We should check if the move is valid (doesn't go out of bounds of the board)
-            if 0 <= new_row <= self.size and 0 <= new_col <= self.size:
+            if 0 <= new_row < self.size and 0 <= new_col < self.size:
                 # We need to create a new state after moving a tile; we're not changing the original one like a shallow copy would so we should do a deepcopy first
                 new_state = deepcopy(self.state)
 

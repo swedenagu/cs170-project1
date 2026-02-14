@@ -70,7 +70,7 @@ def a_star(search_space, heuristic: int):
     counter += 1
 
     while expanding_queue:
-        max_queue_size = max(len(expanding_queue), max_queue_size)
+        max_queue_size = max(expanding_queue.qsize(), max_queue_size)
 
         # We want to look at the puzzle with the lowest combined heuristic and cost next
         # have placeholder values for tuple instead of popping from priority queue without type checking
@@ -102,7 +102,7 @@ def a_star(search_space, heuristic: int):
             return current, nodes_expanded, max_queue_size
 
         # Find neighbors to explore next
-        for neighbor in current.nearest:
+        for neighbor in current.expand():
             if neighbor.to_tuple() not in visited:
                 # Find the heuristic for neighboring node
                 if heuristic == 1:

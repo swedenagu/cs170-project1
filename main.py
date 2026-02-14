@@ -55,38 +55,54 @@ def main():
             print(row)
         print()
 
-        # Select algorithm
-        while(True):
-            algorithm = input("Select the algorithm you want to use: (1) Uniform Cost Search, (2) A* with Misplaced Tile heuristic, or (3) A* with Manhattan Distance heuristic\n")
-            if algorithm in ['1', '2', '3']:
-                break
-        
-        # Next, we need to map the algorithm we picked to its heuristic value. We can pass the result into our general search (A*).
-        heuristic_map = {'1': 0, '2': 1, '3': 2}
-        heuristic = heuristic_map[algorithm]
+    # Select algorithm
+    while(True):
+        algorithm = input("Select the algorithm you want to use: (1) Uniform Cost Search, (2) A* with Misplaced Tile heuristic, or (3) A* with Manhattan Distance heuristic\n")
+        if algorithm in ['1', '2', '3']:
+            break
+    
+    # Next, we need to map the algorithm we picked to its heuristic value. We can pass the result into our general search (A*).
+    heuristic_map = {'1': 0, '2': 1, '3': 2}
+    heuristic = heuristic_map[algorithm]
 
-        # This isn't strictly necessary but it looks nicer in the initial output; map the name of each algorithm to its respective heuristic
-        algorithm_names = {0: "Uniform Cost Search", 1: "A* with Misplaced Tile heuristic", 2: "A* with Manhattan Distance heuristic"}
+    # This isn't strictly necessary but it looks nicer in the initial output; map the name of each algorithm to its respective heuristic
+    algorithm_names = {0: "Uniform Cost Search", 1: "A* with Misplaced Tile heuristic", 2: "A* with Manhattan Distance heuristic"}
 
-        print(f"\nRunning{algorithm_names[heuristic]}...\n")
+    print(f"\nRunning {algorithm_names[heuristic]}...\n")
 
-        # Just displayed beforehand, now we actually run the search
-        result, nodes_expanded, max_queue_size = a_star(selected_puzzle, heuristic)
+    # Just displayed beforehand, now we actually run the search
+    result, nodes_expanded, max_queue_size = a_star(selected_puzzle, heuristic)
 
-        # Display a traceback if solution found
-        if result is not None:
-            print("Solution traceback")
-            print()
+    # Display a traceback if solution found
+    if result is not None:
+        print("Solution traceback")
+        print()
 
-            # Build a path from goal state to initial to make it easier to tell what moves were made
-            path = []
-            current = result
-            while current is not None:
-                path.append(current)
-                current = current.parent
+        # Build a path from goal state to initial to make it easier to tell what moves were made
+        path = []
+        current = result
+        while current is not None:
+            path.append(current)
+            current = current.parent
 
-            # Reverse to show start to goal
-            path.reverse()
+        # Reverse to show start to goal
+        path.reverse()
+
+        print(f"\nSolution found in {len(path) - 1} moves:\n")
+
+        for i, puzzle_state in enumerate(path):
+            if i == 0:
+                print(f"Initial state:")
+            else:
+                print(f"Move {i}: {puzzle_state.move}")
+
+            puzzle_state.print_state()
+
+        print(f"Total moves: {len(path) - 1}")
+        print(f"Nodes expanded: {nodes_expanded}")
+        print(f"Max queue size: {max_queue_size}")
+    else:
+        print("\nNo solution was found.")
 
 if __name__ == "__main__":
     main()
