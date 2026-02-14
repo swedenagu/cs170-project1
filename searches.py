@@ -21,8 +21,8 @@ def manhattan_dist(search_space: list[list[int]]) -> int: # A* search with Manha
     # If the cost (1) is the same in all 4 directions we can move, the heuristic is simply the sum of the distances in the x and y direction between the current state and the goal state
 
     distance = 0
-    for i, row in enumerate(search_space):
-        for j, col in enumerate(row):
+    for i in range(len(search_space)):
+        for j in range(len(search_space)):
             if search_space[i][j] != 0:
                 # We can make a tuple of arrays, one for each row and column and target the specific value we want using those two dimensions
                 goalState_indices = np.where(goalState == search_space[i][j])
@@ -30,7 +30,7 @@ def manhattan_dist(search_space: list[list[int]]) -> int: # A* search with Manha
                 goalState_col = goalState_indices[1][0]
 
                 # Manhattan distance
-                distance += abs(row - goalState_row) + abs(col - goalState_col)
+                distance += abs(i - goalState_row) + abs(j - goalState_col)
 
     return distance
 
@@ -44,10 +44,20 @@ def a_star(search_space, goalState, heuristic: int):
     nodes_expanded = 0
     max_queue_size = 0
     counter = 0
+
+    # Find the initial heuristic
+    if heuristic == 0:
+        h = uniform_cost(initial_state.state)
+    elif heuristic == 1:
+        h = misplaced_tile(initial_state.state)
+    elif heuristic == 2:
+        h = manhattan_dist(initial_state.state)
     
     # repeated_states[starting_node.board_to_tuple()] = "This is the parent board"
 
-    expanding_queue.put((0, counter, initial_state))
+    # Adds a tuple with given total estimated cost to move, counter of nodes, and initial state
+    # not supposed to hardcode to zero heuristic like in uniform cost search, wouldn't be complete
+    expanding_queue.put((h + initial_state.cost, counter, initial_state))
     counter += 1
     # board_states = [] # We keep track of the stack trace of board states by storing them
 
@@ -57,8 +67,8 @@ def a_star(search_space, goalState, heuristic: int):
         max_queue_size = max(len(expanding_queue), max_queue_size)
 
         # We want to look at the puzzle with the lowest combined heuristic and cost next
-        next = expanding_queue.get()
-        current = next[2]
+        # have placeholder values for tuple instead of popping from priority queue without type checking
+        _, _, current = expanding_queue.get()
 
         # This makes sure we don't go to a state we already visited
         if current.to_tuple() in visited:
@@ -74,25 +84,25 @@ def a_star(search_space, goalState, heuristic: int):
         elif heuristic == 2:
             h = manhattan_dist(current.board)
 
-        # We find the misplaced tiles for the current state
-        if heuristic == 1:
-            h = 0
-            for i, row in enumerate(current):
-                for j, col in enumerate(row):
-                    if current.board[i][j] != 0:
-                        if current.board[i][j] != goalState[i][j]:
-                            h += 1
+        # # We find the misplaced tiles for the current state
+        # if heuristic == 1:
+        #     h = 0
+        #     for i, row in enumerate(current):
+        #         for j, col in enumerate(row):
+        #             if current.board[i][j] != 0:
+        #                 if current.board[i][j] != goalState[i][j]:
+        #                     h += 1
         
-        # We find the Manhattan distance for the current state
-        elif heuristic == 2:
-            h = 0
-            for row in range(len(current)):
-                for col in range(len(current)):
-                    if current[row][col] != 0:
-                        goalState_indices = np.where(current == current[row][col])
-                        goalState_row = goalState_indices[0][0]
-                        goalState_col = goalState_indices[1][0]
-                        h += abs(row - goalState_row) + abs(col - goalState_col)
+        # # We find the Manhattan distance for the current state
+        # elif heuristic == 2:
+        #     h = 0
+        #     for row in range(len(current)):
+        #         for col in range(len(current)):
+        #             if current[row][col] != 0:
+        #                 goalState_indices = np.where(current == current[row][col])
+        #                 goalState_row = goalState_indices[0][0]
+        #                 goalState_col = goalState_indices[1][0]
+        #                 h += abs(row - goalState_row) + abs(col - goalState_col)
 
         # Did we reach the goal state yet?
         if current.goalCheck(goalState):
@@ -104,21 +114,21 @@ def a_star(search_space, goalState, heuristic: int):
             return current, nodes_expanded, max_queue_size
 
         # Find neighbors to explore next
-        if heuristic == 1:
-            nearest = current.nearest
-            for tile in nearest:
-                h = 0
-                for row in range(len(tile)):
-                    for col in range(len(tile)):
-                        if tile.board != 0:
-                            if tile.board[row][col] != goalState[row][col]:
-                                h += 1
+        for neighbor in current.nearest:
+            if neighbor.to_tuple() not in visited:
+                # Find the heuristic for neighboring node
+                if heuristic == 0:
+                    h = uniform_cost(neighbor.state)
+                elif heuristic == 1:
+                    h = misplaced_tile(neighbor.state)
+                elif heuristic == 2:
+                    h = manhattan_dist(neighbor.state)
 
-                priority = tile.cost + h
-                expanding_queue.put((priority, counter, tile))
+                priority = neighbor.cost + h
+                expanding_queue.put((priority, counter, neighbor))
                 counter += 1
-        elif heuristic == 2:
-            pass
+
+    return None, nodes_expanded, max_queue_size
 
     # while len(working_queue) > 0:
     #     max_queue_size = max(len(working_queue), max_queue_size)
